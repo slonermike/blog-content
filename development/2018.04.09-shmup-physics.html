@@ -1,0 +1,79 @@
+
+<div>
+        <figure style="float: left; width: 300px" id="attachment_70" aria-describedby="caption-attachment-70" style="width: 300px" class="caption alignright"><img class="wp-image-70 size-full" src="https://slonersoft.com/wp-content/uploads/2018/04/ropes-1.gif" alt="" width="300" height="250"><figcaption id="caption-attachment-70" class="caption-text">My 2011 homebrewed shmup engine included some unique physics features.</figcaption></figure>
+        <p>Last year, I decided I wanted to try and revisit the shmup (<a href="https://en.wikipedia.org/wiki/Shoot_%27em_up">shoot-em-up</a>)&nbsp;genre, this time through the use of Unity, which would handle many of the things that ate up my time on the previous game.&nbsp; This time, there would be no worrying about physics engines, editors, scripting language integrations, shaders, audio APIs.&nbsp; And I would think more carefully this time about my use of physics.</p>
+        </div>
+        <h3>Physics Decisions</h3>
+        <p>Though some would say that there’s no question that you should <a href="https://www.reddit.com/r/Unity3D/comments/2q2n5a/to_use_physics_or_not/">avoid using a physics engine for a shmup</a>, I wanted to keep some of the things that it afforded me.</p>
+        <ol>
+        <li>Well-defined ship &amp; environment collision shapes.</li>
+        <li>Continuous bullet collision (more on this later).</li>
+        <li>“Blowback” effects from weapon fire &amp; explosions.</li>
+        <li>Interactive props</li>
+        <li>Dynamic camera boundaries</li>
+        </ol>
+        <p>There were, however, some problems that physics presented for use in a shmup. &nbsp;In particular, shmup gameplay is all about precision and predictability. &nbsp;When you press the button or interact with the world, it needs to react consistently, or you risk punishing the player at random.</p>
+        <h3>Player Movement</h3>
+        <p>In a shmup, the player typically immediately moves at full speed when the joystick is fully extended in a direction. &nbsp;If you ramp the speed, the feeling of precision input is lost. &nbsp;This can be accomplished by placing the player ship explicitly each frame, but if you&#8217;re using a physics engine, you&#8217;ll lose the ability to have the player collide with enemies, the environment, and camera boundaries, and need to come up with another solution. &nbsp;Typically, this is solved in shmups by limiting playable space in code and literally blowing up the player when they touch anything. &nbsp;For my game, however, this is not the intended design.</p>
+        <p>I accomplished both goals by giving the player a dynamic <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D.html">Rigidbody2D</a>, which will stop when it collides with external forces. &nbsp;Player input is transferred into motion by directly setting the velocity of the player’s ship. &nbsp;This means that collision with other objects works correctly, and the speed of motion reacts immediately and predictably.</p>
+        <div>
+        <figure style="float: right; width: 300px" id="attachment_21" aria-describedby="caption-attachment-21" style="width: 300px" class="caption alignright"><img class="wp-image-21 size-full" src="https://slonersoft.com/wp-content/uploads/2018/04/push-module.gif" alt="" width="300" height="250"><figcaption id="caption-attachment-21" class="caption-text">The PushModule creates a sense of weight and reaction where the physics are faked.</figcaption></figure>
+        </div>
+        <p>I still wanted to impart “blowback” physics on the player. &nbsp;Since velocity is set directly each frame, forces imparted by, say, an explosion, would immediately be negated on the next frame when velocity was re-applied. &nbsp;To enable this, I created a MonoBehaviour component called “<a href="https://gist.github.com/slonermike/d0dc8103736358a31906b7b40bc93f54">PushModule</a>” that contains an additive velocity property which is added to the input-derived velocity each frame. &nbsp;This allows both the “pushing” effect, and the “predictable input” effect to work together harmoniously.</p>
+        <h3>Bullet Collision</h3>
+        <p>This part took a great deal of research and time to land on a consistent solution. &nbsp;First, I tried setting up bullets as triggers, but I found that at low framerates, the bullets could skip right over a target without dealing any damage. &nbsp;Next, I tried removing the <a href="https://docs.unity3d.com/ScriptReference/Collider2D.html">Collider2D</a> and <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D.html">Rigidbody2D</a>. &nbsp;Each frame in the FixedUpdate function, I would <a href="https://docs.unity3d.com/ScriptReference/Physics2D.Raycast.html">Raycast</a> between the previous position and the new position. &nbsp;This mostly worked, but when a bullet was fired at a fast-moving object, there was still a chance they could skip over each other.</p>
+        <p>After conducting some research on the matter, I found that the solution came in the form of <a href="https://docs.unity3d.com/ScriptReference/CollisionDetectionMode2D.Continuous.html">CollisionDetectionMode2D.Continuous</a>&nbsp;along with <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D-isKinematic.html">Rigidbody2D.isKinematic</a>.</p>
+        <p>Continuous collision means that any time a Rigidbody2D would collide with another, even at fast speed and low frame rate, the collision is detected and correctly reported. &nbsp;It’s more expensive than <a href="https://docs.unity3d.com/ScriptReference/CollisionDetectionMode2D.Discrete.html">Discrete</a> collision, but in the case of a shmup, accuracy is extremely important.</p>
+        <p>As with all things in a shmup, bullets need to behave predictably, which makes them a great candidate to be moved by game code, not by the physics engine. &nbsp;Without using the physics engine, we cannot achieve Continuous collision detection, do what do we do?</p>
+        <p>The concept of a Kinematic Rigidbody2D is a bit difficult to describe, but ultimately, it means that it can affect others, but will not be affected by others. &nbsp;In other physics engines, I’ve heard this called “keyframed” or “infinite mass” collision. &nbsp;This allows the object to be placed by code while still being visible to the physics engine.</p>
+        <p>The last piece of the bullet collision puzzle came in the form of <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D.MovePosition.html">Rigidbody2D.MovePosition</a>. &nbsp;In order for Continuous collision detection to work correctly when setting position by code, you need to use this function to update the body’s position, rather than setting the transform’s position. &nbsp;This informs the physics engine that a position change was made, allowing it to calculate everything that would have happened between the old and new positions.</p>
+        <h3>NPC Movement</h3>
+        <div>
+        <figure style="float: left; width: 300px" id="attachment_22" aria-describedby="caption-attachment-22" style="width: 300px" class="caption alignleft"><img class="size-full wp-image-22" src="https://slonersoft.com/wp-content/uploads/2018/04/npc-movement.gif" alt="" width="300" height="250"><figcaption id="caption-attachment-22" class="caption-text">NPCs move along precisely-scripted paths.</figcaption></figure>
+        <p>If you’ve played any old-school shmups, you know that enemy movement is predictable and precise, allowing you to plan your attack well. &nbsp;To achieve this, I wanted to make sure enemy movement was done through updating the position in game code, not through physics forces.</p>
+        </div>
+        <p>From here, I decided to scale back the notion of what mattered in an NPCs physics. &nbsp;Since their motion is being tightly scripted, the notion of stopping when they hit another object is meaningless. &nbsp;Because of this, I can get away with NPCs having <a href="https://docs.unity3d.com/ScriptReference/Collider2D.html">Collider2D</a> on them, but no <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D.html">Rigidbody2D</a>. &nbsp;Motion is achieved entirely through script (following splines, ‘homing’ toward a player, or simply rocketing forward) and no physical simulation is necessary.</p>
+        <p>The one thing I did want was the ability to “blowback” some NPCs from explosions. &nbsp;To achieve this, I simply used the same “PushModule” as I had used on the player, this time interacting with the <a href="https://docs.unity3d.com/ScriptReference/Transform.html">Transform</a> rather than the <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D.html">Rigidbody2D</a>.</p>
+        <h3>Playing with Perspective</h3>
+        <p>In assembling a particular boss fight, I ran into a problem that arose from the perspective. &nbsp;The game is rendered in perspective 3D, but played in flat 2D. &nbsp;This boss would move to one side of the screen and fire a laser beam. &nbsp;Due to the perspective of the camera, simply flattening the z-values of the laser’s start and end positions was insufficient. &nbsp;Doing it that way resulted in the action of the laser not lining up correctly with the visuals of the laser.</p>
+        <div>
+        <figure style="float: right; width: 180px" id="attachment_23" aria-describedby="caption-attachment-23" style="width: 180px" class="caption alignright"><img class="size-full wp-image-23" src="https://slonersoft.com/wp-content/uploads/2018/04/laser-gif.gif" alt="" width="180" height="150"><figcaption id="caption-attachment-23" class="caption-text">This boss proved problematic when the lasers didn&#8217;t align nicely along the gameplay plane.</figcaption></figure>
+        <p>To fix this, instead of raycasting from the start position of the laser to the end position of the laser, I instead take the start and end positions of the beam and project them from their respective camera-parallel planes (not always the same plane), into what I call the “gameplay plane”, which is the camera-parallel plane in which the player flies.</p>
+        </div>
+        <h3>Player Motion vs. Auto-Scrolling</h3>
+        <p>I had always had auto-scrolling segments as part of this game. &nbsp;For a tightly-scripted shmup experience, autoscroll is vitally important to keeping the pace as-intended.</p>
+        <p>When ignoring the physics engine, it’s fairly simple. &nbsp;All player motion happens relative to the camera, rather than the world, but with a physics engine, this becomes more complicated.</p>
+        <p>For my initial implementation, I simplified the player physics vastly by keeping the camera totally stationary and moving the world around it. &nbsp;What I found, however, was that I was losing a great deal of goodness that you get from working with a static environment.</p>
+        <ol>
+        <li>
+        <div>Static environments can bake in <a href="https://docs.unity3d.com/Manual/GIIntro.html">Global Illumination</a> &amp; <a href="https://docs.unity3d.com/Manual/class-ReflectionProbe.html">Reflection Probes</a>.</div>
+        </li>
+        <li>
+        <div>Rendering of <a href="https://docs.unity3d.com/Manual/StaticObjects.html">static meshes</a> can be optimized better than moving meshes.</div>
+        </li>
+        <li>
+        <div>If the camera doesn’t move, the skybox doesn’t move.</div>
+        </li>
+        <li>
+        <div>Enemies that move independently are no trouble, but enemies that interact with the environment introduce strange parenting structures when the environment is constantly moving.</div>
+        </li>
+        <li>
+        <div>How do we handle cases where we want to allow the player to explore? &nbsp;Do we keep the player still and move everything else? &nbsp;What does this mean for camera drift?</div>
+        </li>
+        </ol>
+        <p>I had so much trouble getting the physics to play nice with camera movement in my original shmup game back in 2011 that I was dreading making the transition back to a dynamic camera. &nbsp;Unity3D’s core systems, however, offered me a cheap hack that, seems to be working quite well so far.</p>
+        <div>
+        <div class='monospace'>List&lt;Transform&gt; originalParents=newList&lt;Transform&gt;();<br />
+        foreach(Transformtargetintargets) {<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;originalParents.Add(target.parent);<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;target.SetParent(transform);<br />
+        }<br /><br />
+
+        transform.position=rigidTarget.position;<br />
+        transform.rotation=rigidTarget.rotation;<br />
+
+        for(inti=0;i&lt;targets.Count;i++) {<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;targets[i].SetParent(originalParents[i]);<br />
+        }</div>
+        <p>I believe my next step from here is to skip the parenting element, and simply recalculate the new position and orientation based on relativity between the camera <a href="https://docs.unity3d.com/ScriptReference/Transform.html">Transform</a> and the ship transform, then apply the positions using <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D.MovePosition.html">Rigidbody2D.MovePosition</a> and <a href="https://docs.unity3d.com/ScriptReference/Rigidbody2D.MoveRotation.html">Rigidbody2D.MoveRotation</a>, though as it is today, it does not seem to have any significant adverse effects to use the parenting hack.</p>
+        </div>

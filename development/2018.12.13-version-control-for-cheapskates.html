@@ -1,0 +1,39 @@
+<p>
+    I&#8217;ve been around the block on backups, version control, and sharing of data for my game development projects.&nbsp; As a hobbyist developer, paying for storage is entirely impractical, so I&#8217;ve tried a lot of things to balance workflow with free-ness.
+</p>
+
+<p>
+    <em><strong>TL;DR</strong> I now use a Raspberry Pi as a dedicated Git server.&nbsp; Go to the bottom for links to learn how.</em>
+</p>
+
+
+
+<h2>Homebrew Engine Runaround</h2>
+
+
+
+<ol><li><strong>Nothing</strong> &#8212; On my earliest projects, like most people, I used no VCS.&nbsp; When I screwed up code, I had to unravel all my mistakes.&nbsp; Code refactors were a hellscape of fear.</li><li><strong>Google Drive (round 1)</strong> &#8212; When I first started developing games at home, I would periodically zip the entire project up and put it on Google Drive.<ol><li>👍 Sufficient space for free.</li><li>👍 Reliable server.</li><li>👎 Terrible workflow.</li></ol></li><li><strong>Perforce Repo</strong> &#8212; My codebase was getting way too big not to have proper version control.&nbsp; I was familiar with Perforce, and it was free to use locally on my machine, so I went with that.<ol><li>👍&nbsp;Free for individuals</li><li>👍&nbsp;Decent for code, if a little clunky.</li><li>👎 Astronomical overhead for team projects.</li></ol></li><li><strong>Google Drive (round 2) + Perforce</strong> &#8212; I later onboarded a friend to help with art.&nbsp; He needed to share assets with me and run the game.&nbsp; The Engine code lived on perforce on my machine only.&nbsp; New engine builds were added periodically to Google Drive. The asset folder structure was synched onto Google Drive.<ol><li>👍&nbsp;With one coder and one artist, this worked fairly well as long as we didn&#8217;t often dip into the same spaces.</li><li>👍&nbsp;Reliable, free hosting.</li><li>👎 Backup, but no version control functionality, even for text-based assets, like level scripts or maps.</li></ol></li><li><strong>BitBucket + Mercurial</strong> &#8212; A friend tipped me off to free version control hosting on <a href="http://bitbucket.org">BitBucket</a>.&nbsp; This is where that project <a href="https://bitbucket.org/mslone/c4cash/src/default/">still lives today</a>.&nbsp;&nbsp;<ol><li>👍&nbsp;Free private repos with multiple users!</li><li>👍&nbsp;Plenty of space for smaller projects.</li><li>👍&nbsp;Distributed version control means we can share the repo without relying on internet connection.</li><li>👎&nbsp;Command-line use of mercurial prohibitively intimidating for artist.<ol><li><a href="https://tortoisehg.bitbucket.io/">TortoiseHg</a> made it usable enough, though that is also pretty clunky.</li></ol></li><li>👎&nbsp;The concept of merging is still pretty intimidating to artists.&nbsp; I&#8217;ve really only seen this handled well in Perforce, by avoiding it all together with file locking.</li></ol></li></ol>
+
+
+
+<h2>Unity Engine Runaround</h2>
+
+
+
+<p>I started getting serious with Unity projects around 2015, when I left my job at Activision.&nbsp; At the time, there was no <a href="https://unity3d.com/unity/features/collaborate">Unity Collaborate</a>, so I started where I had left off, but swapped out Mercurial for Git.</p>
+
+
+
+<ol><li><strong>Bitbucket + Git</strong> &#8212; Bitbucket had adopted Git, which I was more familiar with, so I switched to that, using a <a href="https://github.com/github/gitignore/blob/master/Unity.gitignore">.gitignore file specific to Unity</a>.<ol><li>👍&nbsp;Git has a more mature toolset compared to Mercurial.</li><li>👎&nbsp;Working alone this was fine, but conflicts in assets are effectively unfixable.</li><li>👎&nbsp;CLI version control is a bear for non-coders.</li><li>👎&nbsp;Unity projects get big, fast, and Bitbucket has a &#8220;soft limit&#8221; of 1Gb and a &#8220;hard limit&#8221; of 2Gb.&nbsp; Bring in a few store assets, and you&#8217;re beyond that in a hurry.</li></ol></li><li><strong>Unity Collaborate</strong> &#8212; In 2016, Unity <a href="https://blogs.unity3d.com/2016/03/22/unity-collaborate-beta/">announced the beta for Collaborate</a>.&nbsp; A friend had been using it professionally and recommended checking it out (at least, over Git).<ol><li>👍&nbsp;It&#8217;s integrated right into the editor.</li><li>👍&nbsp;It can do&nbsp;<em>some</em>&nbsp;amount of conflict resolution on assets.</li><li>👍&nbsp;Workflow was much easier to understand for artists.</li><li>👍&nbsp;During beta, they offered 15Gb of storage.</li><li>👎&nbsp;In 2017, they dropped the free tier to 1Gb, which meant buying pretty much any store asset bumped you over the limit.&nbsp; This was the final straw for me.</li><li>👎&nbsp;Workflow was awful for coders &#8212; I think it&#8217;s built on Git, but it locks you out of access to nearly everything useful about Git.&nbsp; Diffing, merging, branching, offline commits?&nbsp; Nah.</li></ol></li><li><strong>Personal Raspberry Pi Server + Git</strong> &#8212; I knew nothing about hosting my own git server, but I figured someone must, so like a good programmer, I typed my problem into Google and figured it out.<ol><li>👍&nbsp;Access to central repo from anywhere.</li><li>👍&nbsp;As many users as my little Pi can support in traffic.</li><li>👍&nbsp;Effectively unlimited storage</li><li>👍&nbsp;State-of-the-art version control for code with loads of 3rd party and open-source tools support.</li><li>👍&nbsp;Distributed system for offline work.</li><li>👎&nbsp;Still clunky for asset conflicts.<ol><li>The Unity team themselves have <a href="https://docs.unity3d.com/Manual/SmartMerge.html">provided a merge tool</a>, but I haven&#8217;t tried it yet.</li></ol></li><li>👎&nbsp;SD Card failure rate is high on Raspberry Pi, USB failure rate is lower, but still present.&nbsp; Reliability is eclipsed by that of cloud services.</li></ol></li></ol>
+
+
+
+<h2>How I set up my Raspberry Pi Git server.</h2>
+
+
+
+<p>I&#8217;m not going to go into detail on this part.&nbsp; Plenty of people have explained this better than I can.&nbsp; I&#8217;ll link you to the resources I used.</p>
+
+
+
+<ol><li><a href="https://www.instructables.com/id/GitPi-A-Private-Git-Server-on-Raspberry-Pi/">Set up a Raspberry Pi git repo (Instructables)</a>.<ol><li>Note: use a USB drive, not a SD card, as they tend to burn out on high traffic in Raspberry Pis.&nbsp; It also allows you to pull the drive out if something goes wrong with your Pi.</li></ol></li><li><a href="http://kamilslab.com/2016/12/17/how-to-set-up-ssh-keys-on-the-raspberry-pi/">Set up an SSH key on your Raspberry Pi</a>.<ol><li>This is technically optional, but it&#8217;d be foolish to skip.&nbsp; You&#8217;ll be exposing your Pi to outside threats, so every bit of security is worthwhile.</li></ol></li><li><a href="https://www.howtogeek.com/184310/ask-htg-should-i-be-setting-static-ip-addresses-on-my-router/">Assign your Raspberry Pi a static IP from your router.</a><ol><li>This gives you direct access to your Raspberry Pi from anywhere.</li></ol></li><li>Update the &#8216;origin&#8217; URL of your git repo to point at the new static IP instead of the inside-your-house IP.<ol><li>Remember setting the remote repo url in Instructables step above?&nbsp; Do that again, but change out the previous IP address for your new static one.</li></ol></li><li>(optional) Give your Static IP a friendly DNS name.<ol><li>If you pay for site hosting, odds are your hosting service will let you assign a subdomain to it.&nbsp; This can make it a little easier to work with &#8212; something like gitpi.mysite.com</li></ol></li></ol>

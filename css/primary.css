@@ -1,0 +1,183 @@
+@font-face {
+    font-family: 'still-time';
+    src: url(stilltime.ttf);
+}
+
+@font-face {
+    font-family: 'blade';
+    src: url(blade.ttf);
+}
+
+body {
+    background-color: black;
+}
+
+.root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.header {
+    z-index: -1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 905px;
+    background: url(../images/laser-grid-fade.jpg) 50% 50% no-repeat;
+}
+
+.tag-list {
+    display: none;
+}
+
+.monospace {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #EEEEEE;
+    padding: 0 6px;
+    font-size: 14px;
+}
+
+.site-title {
+    display: none;
+}
+
+.custom-header {
+    top: 80px;
+    left: 60px;
+    width: calc(100% - 60px);
+    position: absolute;
+}
+
+.custom-header .site-title {
+    position: absolute;
+    display: block;
+    color: white;
+    font-family: 'blade';
+    font-size: 4em;
+}
+
+.custom-header .site-title.gradient-overlay {
+    -webkit-mask-image: linear-gradient(to bottom, black 10%, transparent 70%);
+    mask-image: linear-gradient(to bottom, black 10%, #000000cc 70%);
+    margin: 0;
+    position: relative;
+    color: black;
+}
+
+.custom-header .site-subtitle {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    color: #ff00b3;
+    font-family: 'still-time';
+    font-size: 3em;
+}
+
+.section-list {
+    margin-top: 180px;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #00aeff99;
+}
+
+.section-list button {
+    border-radius: 0;
+}
+
+.blog {
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #00aeff99;
+    padding: 16px;
+}
+
+.article {
+    padding: 16px;
+    background-color: #ffffffcc;
+    border: 2px solid #ffffff;
+    overflow: hidden;
+}
+
+.article .title {
+    background: #006492;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2em;
+    color: white;
+    text-shadow: 2px 2px #00aeff;
+    padding: 18px;
+    border: 2px solid #ffffff;
+    border-bottom: 0;
+}
+
+.article .date {
+    background: #006492;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    padding: 0 0 18px 18px;
+    border: 2px solid #ffffff;
+    border-top: 0;
+}
+
+.caption {
+    border: 2px solid #006492;
+    background-color: #ffffff99;
+}
+
+.caption-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8em;
+    padding: 8px;
+}
+
+.content h1, .content h2, .content h3 {
+    margin-top: 60px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+div.monospace {
+    padding: 12px;
+}
+
+span.monospace {
+    padding: 2px 8px;
+}
+
+@media only screen and (max-width: 540px) {
+    .blog {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .article {
+        border: 0;
+    }
+
+    .section-list {
+        margin-left: 0;
+        margin-right: 0;
+        margin-top: 120px;
+    }
+
+    .custom-header {
+        left: 22px;
+        top: 40px;
+    }
+
+    .custom-header .site-title {
+        font-size: 2.5em;
+    }
+
+    .custom-header .site-subtitle {
+        font-size: 2.5em;
+        top: 14px;
+    }
+}
+
+@media only screen and (min-width: 1920px) {
+    .header {
+        background-size: 100% 1080px;
+    }
+}

@@ -1,0 +1,47 @@
+<p>
+    After finally getting around to turning my “Sloppy Joe” project into actual code, I spent a
+    few hours here and there and worked out a simple React/Redux/Typescript project with a few
+    hundred lines of code that had a pretty good start on the things I wanted it to do. It was
+    time to push it up to GitHub.
+</p>
+
+<p>
+    I created the repo on GitHub, set my remote, and ran <span class="monospace">git pull</span> from my project directory.
+</p>
+
+<p>To my horror, it replaced my local <span class='monospace'>master</span> with the remote master,
+    deleting everything that wasn’t specified by <span class='monospace'>.gitignore</span>. I have
+    <span class='monospace'>git pull --rebase</span> as my default setting, and the day
+    finally came when that bit me hard. Knowing that any such problem has always been encountered
+    by someone else, I searched around a bit on how to recover from a <span class='monospace'>git
+    pull --rebase</span> disaster, and I found this little gem.
+</p>
+
+<p>
+    <span class='monospace'>git reflog</span> (Documentation)
+</p>
+
+<p>
+    This spits out raw commit references to everything you’ve been doing. From there, I was able to
+    <span class='monospace'>git checkout [SHA]</span>, create a new branch <span class='monospace'>app-setup</span>
+    and merge my new <span class='monospace'>master</span> up into that branch.
+</p>
+
+<p>
+    Since these two branches were effectively from two unrelated repos, it refused to merge these two
+    branches and will give out the following error.
+</p>
+
+<p>
+    <span class='monospace'>fatal: refusing to merge unrelated histories</span>
+</p>
+
+<p>
+    And after some minimal-effort googling, I found that i just needed to
+    <span class='monospace'>git merge [branch] --allow-unrelated-histories</span>
+</p>
+
+<p>
+    I had to manually merge the README files, which was no big deal, since I intended
+    to throw one out, and now everything is fine and my heart rate has returned to normal.
+</p>
