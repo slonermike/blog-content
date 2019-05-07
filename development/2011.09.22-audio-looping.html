@@ -1,0 +1,117 @@
+<h1>Dynamic Looping with the BASS Audio API</h1>
+<p>
+    I find it easiest to write about something I’ve done recently, so I’m going to share about the dynamic music system I made for Chickens 4 Cash on Monday.  I’ll first explain how it came about, then explain how it works, with some (hopefully) helpful pointers on how to leverage the <a href="http://www.un4seen.com/">BASS Audio API</a> for such a system.  For the sake of keeping things simple, I’m going to explain this as though we’re accessing the API directly, despite that it’s actually wrapped in my own code.
+</p>
+
+<h2>Fat Chance</h2>
+<p>
+    A friend of mine, off whom I often bounce my game ideas, suggested putting together a dynamic music system for Chickens 4 Cash.  Initially, I imagined it being the way it had been at Volition, with all kinds of awesome orchestral cues with smooth, dynamic transitions.  With that in mind, my initial reaction was that the amount of work required was prohibitive, given the scope the game.
+</p>
+
+<h2>New Inspiration</h2>
+<p>
+    I had been working on music for a boss, and it became apparent, not only that the stages of the boss (because every good shmup boss has stages) each needed to have their own musical cue, but also that the level could potentially continue on indefinitely.  So I got to work on a new plan for the system.
+</p>
+
+
+<h2>Keeping it Simple</h2>
+<p>With the notion that I needed to keep it simple, and some exploration into how my audio API worked, the Slonersoft dynamic music system became as follows…</p>
+<ul>
+    <li>Music is split into “sets” which contain a series of loops which can be played back end-to-end.</li>
+    <li>Each set has one contiguous audio file, within which we will jump around to make the loops work.</li>
+    <li>This played best with the API, which supports seamlessly jumping around within a playing stream.</li>
+    <li>My initial plan was to have separate files for each loop, but they didn’t line up seamlessly in playback.</li>
+    <li>One set is loaded & played at a time.</li>
+</ul>
+
+<h3>The Loop Data</h3>
+<ul>
+    <li>A name & name hash for the loop.</li>
+    <li>A start & end time (floating point seconds in the XML, QWORD of bytes in code)</li>
+</ul>
+
+<h3>The Set Data</h3>
+<ul>
+    <li>A name & name hash for the set.</li>
+    <li>The filename for the audio.</li>
+    <li>A list of loops.</li>
+    <li>A handle for the playing audio channel (the stream handle in the case of BASS streams).</li>
+    <li>An index of the default loop that should play if the queue ends or if the set is asked to play with no loop index parameter.</li>
+</ul>
+
+
+<h2>Using the API</h2>
+<p>
+    <strong>Getting the Times in Bytes</strong> - You’ll need the start and end times of your loops in terms of bytes.  To convert from time in seconds to time in bytes, you’ll use the function:
+    <span class="monospace">QWORD BASS_ChannelSeconds2Bytes(DWORD handle, double pos);</span> …passing in the channel/stream handle and the time in seconds.
+</p>
+<p>
+    <strong>Getting Notified</strong> - To get notified that you have reached the end of the current loop, you’ll use the function <span class="monospace">BASS_ChannelSetSync</span>
+    function and pass it a callback of type <span class="monospace">SYNC_PROC *</span>. To sync to a specific time, you’ll call it like so:
+    <div class="monospace">HSYNC loopSync = BASS_ChannelSetSync(channelHandle, BASS_SYNC_POS|BASS_SYNC_MIXTIME, timeInBytes, syncCallback, 0);</div>
+    If you want to sync to the end of the stream (which you’ll want to do for the last loop in the set), you call it like so:
+
+    <div class="monospace">HSYNC loopSync = BASS_ChannelSetSync(channelHandle, BASS_SYNC_END|BASS_SYNC_MIXTIME, 0, syncCallback, 0);</div>
+
+    This function will pass back a value of type HSYNC, which you should store so that before you change it to something else, you can clear it with:
+
+    <div class="monospace">BASS_ChannelRemoveSync(channelHandle, loopSync);</div>
+</p>
+<p>
+    <strong>Sending it Back</strong> - Once you’ve reached the end of your loop (as denoted by a call of the callback), you’ll either want to send it to the beginning of the current loop, or to the beginning of another loop.  You’ll do this like so:
+    <div class="monospace">BASS_ChannelSetPosition(channelHandle, timeInBytes, BASS_POS_BYTE);</div>
+</p>
+
+<h2>Queuing Up Music</h2>
+<p>
+    Once you’ve got the music playing, you’ll want to be able to queue up loops for the changes.  For this, I made a linked list queue which contains the index of the loop to play, combined with the number of times we want it to play.  In the case that I want it to play indefinitely until another loop comes along, I store -1 here.
+</p>
+
+<h2>Script Hooks</h2>
+
+<p>
+    So with the code-side system all put together, all it needs is a set of script hooks.  I’m using Lua for my scripting, so I’ll share the Lua function prototypes I have for this.
+</p>
+
+<h3>Play a specified music set.</h3>
+<div class="monospace" style="font-weight: bold">function music_play_set(set_name, loop_name = nil)…</div>
+<ul>
+    <li><span class="monospace">set_name (string)</span>: The name of the music set to play.</li>
+    <li><span class="monospace">loop_name (string, optional)</span>: The name of the loop to start with.</li>
+</ul>
+
+<h3>Switch to a specified loop in the currently-loaded set.</h3>
+<div class="monospace" style="font-weight: bold">function music_play_loop(loop_name, loop_times = -1, immediate_switch = false)…</div>
+<ul>
+    <li><span class="monospace">loop_name (string)</span>: the name of the loop to switch to.</li>
+    <li><span class="monospace">loop_times (integer, default -1)</span>: -1 to loop until another comes along, a positive number to loop a finite number of times.</li>
+    <li><span class="monospace">immediate_switch (bool, default false)</span>: True to immediately switch to this loop.  False to enqueue it.</li>
+</ul>
+
+<h2>Gotchas</h2>
+<p>
+    There were a couple “gotchas” surrounding how you load the file.  I load my files with
+
+    <div class="monospace">HSTREAM BASS_StreamCreateFile(BOOL mem, const void *file, QWORD offset, QWORD length, DWORD flags);</div>
+
+    but the example seems to make it appear that you can also use…
+
+    <div class="monospace">HMUSIC BASS_MusicLoad(BOOL mem, const void *file, QWORD offset, DWORD length, DWORD flags, DWORD freq);</div>
+
+    which, in my brief attempt, I didn’t get to work right.
+</p>
+<p>
+    I also noted that if you pass <span class="monospace">BASS_SAMPLE_LOOP</span> into the flags field, it will never hit the end-of-file callback you set up with <span class="monospace">BASS_SYNC_END</span>.
+</p>
+<p>
+    <em>After I posted this article to #AltDevBlogADay in 2011, a few questions came up regarding issues that may come from trying to synchornize with an asynchronous audio stream, which I addressed as follows:</em>
+</p>
+<div style="background-color: #CCCCCC; border: 2px solid black; padding: 6px">
+    <blockquote>Once you’ve reached the end of your loop (as denoted by a call of the
+    callback), you’ll either want to send it to the beginning of the current
+    loop, or to the beginning of another loop."</blockquote><br /><br />
+    <em>How is this supposed to work? When you reach desired point, it is already too late because sound is played asynchronously and buffered ahead of time 100ms or more.</em>
+</div>
+<p>
+    The callback gets hit when the buffering hits the mark, rather than playback. It lines up rather nicely. This is also why it didn't work using separate files/streams.
+</p>

@@ -19,6 +19,10 @@ body {
     width: 100%;
 }
 
+a, a:visited {
+    color: #006492;
+}
+
 .header {
     z-index: -1;
     position: absolute;
@@ -74,20 +78,29 @@ body {
     color: #ff00b3;
     font-family: 'still-time';
     font-size: 3em;
+    text-shadow: 1px 1px 3px #ff0066;
 }
 
 .section-list {
     margin-top: 180px;
     margin-left: 20px;
     margin-right: 20px;
-    background-color: #00aeff99;
+    padding: 16px 16px 0;
 }
 
-.section-list button {
-    border-radius: 0;
+.section-list a, a:visited {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bolder;
+    text-decoration: none;
+    color: white;
+    padding: 8px;
+    margin-right: 8px;
+    background-color: #004768;
+    border: 1px solid #00aeff;
 }
 
 .blog {
+    margin-top: 20px;
     margin-left: 20px;
     margin-right: 20px;
     background-color: #00aeff99;
@@ -110,6 +123,8 @@ body {
     padding: 18px;
     border: 2px solid #ffffff;
     border-bottom: 0;
+    display: block;
+    text-decoration: none;
 }
 
 .article .date {
