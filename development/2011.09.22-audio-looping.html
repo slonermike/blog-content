@@ -1,4 +1,3 @@
-<h1>Dynamic Looping with the BASS Audio API</h1>
 <p>
     I find it easiest to write about something I’ve done recently, so I’m going to share about the dynamic music system I made for Chickens 4 Cash on Monday.  I’ll first explain how it came about, then explain how it works, with some (hopefully) helpful pointers on how to leverage the <a href="http://www.un4seen.com/">BASS Audio API</a> for such a system.  For the sake of keeping things simple, I’m going to explain this as though we’re accessing the API directly, despite that it’s actually wrapped in my own code.
 </p>
@@ -106,10 +105,10 @@
 <p>
     <em>After I posted this article to #AltDevBlogADay in 2011, a few questions came up regarding issues that may come from trying to synchornize with an asynchronous audio stream, which I addressed as follows:</em>
 </p>
-<div style="background-color: #CCCCCC; border: 2px solid black; padding: 6px">
+<div style="background-color: #CCCCCC; border: 2px solid black; padding: 16px; max-width: 600px">
     <blockquote>Once you’ve reached the end of your loop (as denoted by a call of the
     callback), you’ll either want to send it to the beginning of the current
-    loop, or to the beginning of another loop."</blockquote><br /><br />
+    loop, or to the beginning of another loop."</blockquote>
     <em>How is this supposed to work? When you reach desired point, it is already too late because sound is played asynchronously and buffered ahead of time 100ms or more.</em>
 </div>
 <p>

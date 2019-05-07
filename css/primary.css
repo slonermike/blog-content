@@ -127,6 +127,10 @@ a, a:visited {
     text-decoration: none;
 }
 
+.article a:hover.title {
+    text-shadow: 2px 2px #ff00b3;
+}
+
 .article .date {
     background: #006492;
     font-family: 'Courier New', Courier, monospace;
