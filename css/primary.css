@@ -23,14 +23,16 @@ a, a:visited {
     color: #006492;
 }
 
+a:hover {
+    color: #008bcc;
+}
+
 .header {
     z-index: -1;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
-    height: 905px;
-    background: url(../images/laser-grid-fade.jpg) 50% 50% no-repeat;
 }
 
 .tag-list {
@@ -48,11 +50,29 @@ a, a:visited {
     display: none;
 }
 
-.custom-header {
-    top: 80px;
-    left: 60px;
-    width: calc(100% - 60px);
+.snazzy-background {
     position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 400px;
+
+    /* https://www.heropatterns.com/ */
+    background-color: #181818;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23000000' fill-opacity='1' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+
+    -webkit-mask-image: linear-gradient(to bottom, black 10%, transparent 70%);
+    mask-image: linear-gradient(to bottom, black 10%, #000000cc 70%);
+}
+
+.custom-html {
+    width: 100%;
+}
+
+.custom-header {
+    width: 80%;
+    max-width: 900px;
+    margin: 80px auto 0;
 }
 
 .custom-header .site-title {
@@ -72,8 +92,8 @@ a, a:visited {
 }
 
 .custom-header .site-subtitle {
-    position: absolute;
-    top: 30px;
+    position: relative;
+    top: -26px;
     left: 30px;
     color: #ff00b3;
     font-family: 'still-time';
@@ -82,47 +102,102 @@ a, a:visited {
 }
 
 .section-list {
-    margin-top: 180px;
-    margin-left: 20px;
-    margin-right: 20px;
+    width: 80%;
+    max-width: 900px;
+    margin: 180px auto 0;
     padding: 16px 16px 0;
+    line-height: 40px;
 }
 
-.section-list a, a:visited {
+.section-link {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.section-link a:hover {
+    text-decoration: underline;
+}
+
+.section-list a, .section-list a:visited {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bolder;
     text-decoration: none;
     color: white;
-    padding: 8px;
-    margin-right: 8px;
-    background-color: #004768;
-    border: 1px solid #00aeff;
+}
+
+.section-link.selected a {
+    color: #ff00b3;
 }
 
 .blog {
     margin-top: 20px;
-    margin-left: 20px;
-    margin-right: 20px;
-    background-color: #00aeff99;
-    padding: 16px;
 }
 
 .article {
-    padding: 16px;
-    background-color: #ffffffcc;
-    border: 2px solid #ffffff;
+    background-color: white;
+    color: #666666;
     overflow: hidden;
+    margin-bottom: 0;
+}
+
+.content, .article-head .title, .article-head .date {
+    position: relative;
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    padding-bottom: 60px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.expand-container {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 16px;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+.expand-container::before {
+    content: "";
+    background-color: black;
+    -webkit-mask-image: linear-gradient(to bottom, black 10%, transparent 70%);
+    mask-image: linear-gradient(to bottom, black 10%, #000000cc 70%);
+}
+
+.expand-container a, .expand-container a:visited {
+    text-decoration: none;
+}
+
+.article-head {
+    position: relative;
+    background-color: #333333;
+}
+
+.article-head-bg {
+    position: absolute;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #ff00b3 33%,#00aeff 66%);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23ff00b3' fill-opacity='0.22' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23ff00b3' fill-opacity='0.22' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+.article-head::after, .article-head::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 5px;
+    left: 0;
+    background: linear-gradient(to right, #ff00b3 33%,#00aeff 66%);
 }
 
 .article .title {
-    background: #006492;
     font-family: 'Courier New', Courier, monospace;
     font-size: 2em;
     color: white;
     text-shadow: 2px 2px #00aeff;
     padding: 18px;
-    border: 2px solid #ffffff;
-    border-bottom: 0;
     display: block;
     text-decoration: none;
 }
@@ -132,12 +207,9 @@ a, a:visited {
 }
 
 .article .date {
-    background: #006492;
     font-family: 'Courier New', Courier, monospace;
     color: white;
     padding: 0 0 18px 18px;
-    border: 2px solid #ffffff;
-    border-top: 0;
 }
 
 .caption {
@@ -164,25 +236,28 @@ span.monospace {
     padding: 2px 8px;
 }
 
-@media only screen and (max-width: 540px) {
+.blog.portfolio .expand-container {
+    display: none;
+}
+
+.blog.portfolio .article .content {
+    height: unset;
+    -webkit-mask-image: unset;
+    mask-image: unset;
+}
+
+@media only screen and (max-width: 600px) {
     .blog {
         margin-left: 0;
         margin-right: 0;
     }
 
-    .article {
-        border: 0;
-    }
-
     .section-list {
-        margin-left: 0;
-        margin-right: 0;
         margin-top: 120px;
     }
 
     .custom-header {
-        left: 22px;
-        top: 40px;
+        margin-top: 50px;
     }
 
     .custom-header .site-title {
@@ -191,7 +266,7 @@ span.monospace {
 
     .custom-header .site-subtitle {
         font-size: 2.5em;
-        top: 14px;
+        top: -18px;
     }
 }
 
