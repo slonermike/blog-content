@@ -215,6 +215,8 @@ a:hover {
 .caption {
     border: 2px solid #006492;
     background-color: #ffffff99;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .caption-text {
@@ -230,6 +232,8 @@ a:hover {
 
 div.monospace {
     padding: 12px;
+    overflow: scroll;
+    margin: 16px 0;
 }
 
 span.monospace {
@@ -268,10 +272,24 @@ span.monospace {
         font-size: 2.5em;
         top: -18px;
     }
+
+    .caption {
+        margin: 18px 0;
+    }
 }
 
-@media only screen and (min-width: 1920px) {
-    .header {
-        background-size: 100% 1080px;
+@media only screen and (max-width: 350px) {
+
+    .custom-header .site-title {
+        font-size: 2.0em;
+    }
+
+    .custom-header .site-subtitle {
+        font-size: 2.5em;
+        top: -18px;
+    }
+
+    .caption {
+        margin: 18px 0;
     }
 }
