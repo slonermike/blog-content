@@ -1,11 +1,12 @@
 {
   "siteTitle": "Michael Slone",
-  "siteVersion": 1,
+  "siteVersion": 2,
   "sections": {
     "dev-blog": {
       "name": "Dev Blog",
       "keyName": "dev-blog",
       "entries": [
+        "development-2019-09-03-whats-your-weakness",
         "development-2019-02-28-git-rebase-horror",
         "development-2018-12-13-version-control-for-cheapskates",
         "development-2018-04-09-shmup-physics",
@@ -13,17 +14,29 @@
       ],
       "entryOrder": 1
     },
-    "portfolio": {
-      "name": "Portfolio",
-      "keyName": "portfolio",
+    "professional-dev": {
+      "name": "Professional Dev",
+      "keyName": "professional-dev",
       "entries": [
-        "portfolio-zombies-shadows-of-evil",
+        "portfolio-hulu-live",
         "portfolio-black-ops-3",
+        "portfolio-zombies-shadows-of-evil",
         "portfolio-zombies-origins",
         "portfolio-black-ops-2",
         "portfolio-saints-row-3",
         "portfolio-red-faction-4",
         "portfolio-saints-row-2"
+      ],
+      "entryOrder": 0
+    },
+    "hobby-dev": {
+      "name": "Hobby Dev",
+      "keyName": "hobby-dev",
+      "entries": [
+        "hobbyist-lunchlady-sloppy-joe",
+        "hobbyist-helios-warp",
+        "hobbyist-haste-the-dawn",
+        "hobbyist-super-clarity-blast"
       ],
       "entryOrder": 0
     }
@@ -120,16 +133,68 @@
         "gamedev"
       ],
       "date": "2011-09-22T16:50:39.176Z"
+    },
+    "development-2019-09-03-whats-your-weakness": {
+      "file": "development/2019.09.03-whats-your-weakness.html",
+      "keyName": "development-2019-09-03-whats-your-weakness",
+      "title": "Interview Softballs: What's Your Weakness?",
+      "tags": [
+        "interviewing"
+      ],
+      "date": "2019-09-03T17:16:55.221Z"
+    },
+    "hobbyist-super-clarity-blast": {
+      "file": "hobbyist/super-clarity-blast.html",
+      "keyName": "hobbyist-super-clarity-blast",
+      "title": "Super Clarity Blast",
+      "tags": [],
+      "date": "2019-10-16T19:24:00.777Z"
+    },
+    "hobbyist-haste-the-dawn": {
+      "file": "hobbyist/haste-the-dawn.html",
+      "keyName": "hobbyist-haste-the-dawn",
+      "title": "Haste The Dawn",
+      "tags": [],
+      "date": "2019-10-16T19:51:32.208Z"
+    },
+    "portfolio-hulu-live": {
+      "file": "portfolio/hulu-live.html",
+      "keyName": "portfolio-hulu-live",
+      "title": "Hulu with Live TV",
+      "tags": [],
+      "date": "2019-10-16T20:26:44.533Z"
+    },
+    "hobbyist-helios-warp": {
+      "file": "hobbyist/helios-warp.html",
+      "keyName": "hobbyist-helios-warp",
+      "title": "Helios Warp",
+      "tags": [],
+      "date": "2019-10-16T21:41:12.570Z"
+    },
+    "hobbyist-lunchlady-sloppy-joe": {
+      "file": "hobbyist/lunchlady-sloppy-joe.html",
+      "keyName": "hobbyist-lunchlady-sloppy-joe",
+      "title": "Lunchlady & Sloppy Joe",
+      "tags": [],
+      "date": "2019-10-18T23:54:33.239Z"
     }
   },
   "css": [
-    "css/primary.css"
+    "default/css/default.css",
+    "slonersoft/css/slonersoft.css"
   ],
-  "divs": [
-    "divs/header.html"
-  ],
+  "divs": {
+    "headers": [
+      "slonersoft/html/headers/header.html"
+    ]
+  },
   "sectionOrder": [
     "dev-blog",
-    "portfolio"
+    "professional-dev",
+    "hobby-dev"
+  ],
+  "themes": [
+    "default",
+    "slonersoft"
   ]
 }

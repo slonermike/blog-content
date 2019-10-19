@@ -1,0 +1,229 @@
+<html>
+    <header>
+        <style>
+            .resume {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .top-bar {
+                position: relative;
+                width: 100%;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg id='hexagons' fill='%23fefdff' fill-opacity='0.4' fill-rule='nonzero'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                background-color: #dbf2ff;
+                color: black;
+                padding: 30px 0;
+            }
+
+            .top-bar div {
+                margin-left: 50px;
+            }
+
+            .top-bar .name {
+                font-size: 2.0em;
+                padding-bottom: 10px;
+            }
+
+            .top-bar .title {
+                font-size: 1.2em;
+            }
+
+            .side-bar {
+                position: absolute;
+                width: 250px;
+                right: 0;
+                top: 0;
+                background-color: #002033;
+                color: white;
+                padding-top: 30px;
+                box-shadow: -5px 0px 20px #000000;
+                z-index: 1;
+            }
+
+            .side-divider {
+                position: relative;
+                opacity: 50%;
+                left: 5px;
+                width: 220px;
+                height: 2px;
+                background-color: #CCCCCC;
+            }
+
+            .side-bar div {
+                margin-left: 10px;
+            }
+
+            .side-bar .title {
+                margin-top: 20px;
+                margin-bottom: 20px;
+                font-weight: bold;
+                font-size: 2.0em;
+            }
+
+            .side-bar .subtitle {
+                font-weight: bold;
+                font-size: 1.1em;
+                margin-top: 5px;
+                margin-bottom: 5px
+            }
+
+            .side-bar .content {
+                margin-bottom: 12px;
+                font-size: 0.8em;
+                line-height: 1.4em;
+            }
+
+            .side-bar a {
+                color: #cccccc;
+                text-decoration: none;
+            }
+
+            .side-bar a:hover {
+                color: #00cccc;
+                text-decoration: underline;
+            }
+
+            .side-category {
+                margin-bottom: 40px;
+            }
+
+            .experience {
+                padding-top: 30px;
+                position: relative;
+                width: calc(100% - 250px);
+                background-color: #ffffff;
+                color: #000000;
+            }
+
+            .experience .title {
+                font-style: italic;
+                font-size: 1.2em;
+                border-bottom: 2px solid #738088;
+            }
+
+            .experience .title, .job {
+                margin: 0 50px 20px 50px;
+            }
+
+            .employer {
+                font-weight: bold;
+                font-size: 1.2em;
+            }
+
+            .job-title {
+                font-size: 1em;
+            }
+
+            .dates {
+                font-size: 0.8em;
+                font-style: italic;
+            }
+
+            .descriptors {
+                font-size: 0.8em;
+            }
+        </style>
+    </header>
+    <body>
+        <div class="resume">
+            <div class="top-bar">
+                <div class="name">Michael Slone</div>
+                <div class="title">Senior Software Engineer</div>
+            </div>
+            <div class="side-bar">
+                <div class="side-category contact">
+                    <div class="title">Contact</div>
+                    <div class="subtitle">Email</div>
+                    <div class="content"><a href="mailto:michaelgareth@gmail.com">michaelgareth@gmail.com</a></div>
+                    <div class="subtitle">GitHub</div>
+                    <div class="content"><a href="http://github.com/slonermike">slonermike</a></div>
+                    <div class="subtitle">LinkedIn</div>
+                    <div class="content"><a href="https://www.linkedin.com/in/michael-slone-276b286/">Michael Slone</a></div>
+                    <div class="subtitle">Website</div>
+                    <div class="content"><a href="http://slone.tech">slone.tech</a></div>
+                </div>
+                <div class="side-divider"></div>
+                <div class="side-category skills">
+                    <div class="title">Skills</div>
+                    <div class="subtitle">Daily</div>
+                    <div class="content">
+                        TypeScript<br />
+                        ES6/JavaScript<br />
+                        HTML5<br />
+                        CSS/SASS<br />
+                        Git<br />
+                        Jira<br />
+                        Agile/Scrum<br />
+                    </div>
+                    <div class="subtitle">Frequently</div>
+                    <div class="content">
+                        C#<br />
+                        Node.js<br />
+                        Redux<br />
+                        React<br />
+                        Unity<br />
+                    </div>
+                    <div class="subtitle">Previously</div>
+                    <div class="content">
+                        C/C++<br />
+                        Lua<br />
+                        CoffeeScript<br />
+                    </div>
+                </div>
+            </div>
+            <div class="experience">
+                <div class="title">
+                    Work History
+                </div>
+                <div class="job">
+                    <div class="employer">Hulu</div>
+                    <div class="job-title">Senior Software Engineer</div>
+                    <div class="dates">Seattle, Washington&nbsp;&nbsp|&nbsp;&nbspJan 2019-Present</div>
+                    <ul class="descriptors">
+                        <li>Lead development of our dogfooding preview program across multiple client teams.</li>
+                        <li>Collaborated with the design and product teams to define standards for technical design documentation.</li>
+                        <li>Conduct interviews to hire developers, product managers, and designers across Hulu Seattle.</li>
+                        <li>Hired and mentored interns who all shipped important features to our users.</li>
+                        <li>Developed single-page Hulu OTT app from nothing to fully-functional with custom platform functionality and optimizations.</li>
+                        <li>Ensure long-term stability and performance of the app through test-driven development.</li>
+                        <li>Review, refine, and develop new UI/UX features on dozens of living room devices.</li>
+                        <li>Develop lightning-fast prototypes to quickly identify and push product and technical boundaries.</li>
+                    </ul>
+                    <div class="job-title">Software Engineer</div>
+                    <div class="dates">May 2015-Jan 2019</div>
+                </div>
+                <div class="job">
+                    <div class="employer">Activision</div>
+                    <div class="job-title">Game Designer</div>
+                    <div class="dates">Santa Monica, California&nbsp;&nbsp|&nbsp;&nbspDec 2011-Jan 2015</div>
+                    <ul class="descriptors">
+                        <li>Designed and scripted zombie and campaign missions on Black Ops II and III.</li>
+                        <li>Developed rapid research prototypes of new multiplayer game modes.</li>
+                        <li>Provided script stability support for less-technical designers.</li>
+                    </ul>
+                </div>
+                <div class="job">
+                    <div class="employer">THQ Volition</div>
+                    <div class="job-title">Gameplay Programmer</div>
+                    <div class="dates">Champaign, Illinois&nbsp;&nbsp|&nbsp;&nbspJan 2007-July 2011</div>
+                    <ul class="descriptors">
+                        <li>Programmed scripting and authoring tools for dynamic animated destruction and node-based visual scripting system for Red Faction: Armageddon.</li>
+                        <li>Programmed gameplay systems and missions for Saints Row 2 and 3.</li>
+                    </ul>
+                </div>
+                <div class="title" style="margin-top: 40px;">
+                    Education
+                </div>
+                <div class="job">
+                    <div class="employer">Illinois Institute of Technology</div>
+                    <div class="job-title">B.S. Computer Science</div>
+                    <div class="dates">Chicago, Illinois&nbsp;&nbsp|&nbsp;&nbsp2003-2006</div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </body>
+</html>
